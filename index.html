@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مطبخ بلا هدر – Zero Waste Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f8f2;--card:#fff;--tx:#1d2b1f;--mut:#5d6d5f;--pr:#2e7d32;--pr2:#e3f1e2;--wn:#e65100;--bd:#d5e2d3;--rd:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a13;--card:#1c261d;--tx:#e8f0e8;--mut:#a3b3a4;--pr:#66bb6a;--pr2:#243a26;--wn:#ffa726;--bd:#2f402f;--rd:#ef5350}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Arial,sans-serif;line-height:1.7}
+.w{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:.2rem 0}h2{font-size:1.1rem;margin:.2rem 0 .6rem}
+.sub{color:var(--mut);margin:0 0 12px;font-size:.9rem}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+.tabs button{flex:1;min-width:110px;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,select{padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;flex:1;min-width:120px}
+.btn{padding:9px 16px;border:0;border-radius:8px;background:var(--pr);color:#fff;font:inherit;cursor:pointer}
+.btn.g{background:var(--pr2);color:var(--pr)}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.it:last-child{border:0}
+.tag{padding:2px 10px;border-radius:99px;font-size:.8rem;background:var(--pr2);color:var(--pr)}
+.tag.w{background:#fff3e0;color:var(--wn)}.tag.r{background:#ffebee;color:var(--rd)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{padding:5px 12px;border:1px solid var(--bd);border-radius:99px;cursor:pointer;background:var(--card);color:var(--tx);font:inherit}
+.chip.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stat b{display:block;font-size:1.4rem;color:var(--pr)}
+.mut{color:var(--mut);font-size:.85rem}
+ol{padding-inline-start:20px;margin:6px 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>🥗 مطبخ بلا هدر</h1>
+<p class="sub">تتبّع أكلك، اعرف إيه هيخلص صلاحيته، واتعلّم تعمل منه وجبة جديدة. (SDG 12.3 · SDG 2 · SDG 13)</p>
+<div class="tabs" id="tabs">
+<button class="on" data-t="inv">📦 ثلاجتي</button>
+<button data-t="rec">🍳 وصفات من الباقي</button>
+<button data-t="imp">🌍 أثري</button>
+</div>
+
+<section id="inv">
+<div class="card"><h2>إضافة صنف</h2>
+<div class="row"><input id="nm" placeholder="اسم الصنف (مثلاً: أرز مطبوخ)" list="sug"><datalist id="sug"></datalist>
+<select id="cat"></select></div>
+<div class="row" style="margin-top:8px"><input id="dt" type="date"><button class="btn" id="add">إضافة</button></div>
+<p class="mut">المدة المقترحة تقديرية؛ التزم دائمًا بتاريخ الصلاحية المكتوب على العبوة.</p></div>
+<div class="card"><h2>المخزون</h2><div id="list"></div></div>
+</section>
+
+<section id="rec" hidden>
+<div class="card"><h2>اختر اللي عندك</h2><div class="chips" id="chips"></div></div>
+<div id="rres"></div>
+</section>
+
+<section id="imp" hidden>
+<div class="card stat"><div><b id="s1">0</b>كجم أُنقذت</div><div><b id="s2">0</b>جنيه وُفّرت</div><div><b id="s3">0</b>كجم CO₂ تفاديتها</div></div>
+<div class="card"><h2>سجّل أكلًا أنقذته من الرمي</h2>
+<div class="row"><input id="kg" type="number" min="0" step="0.1" placeholder="الوزن بالكيلو"><input id="pr" type="number" min="0" step="1" placeholder="سعر الكيلو (جنيه)"></div>
+<div class="row" style="margin-top:8px"><button class="btn" id="sv">تسجيل</button><button class="btn g" id="rs">مسح السجل</button></div>
+<p class="mut">تقدير الكربون = 2.5 كجم CO₂ لكل كجم طعام (رقم تقريبي). في مصر يُهدر نحو 155 كجم للفرد سنويًا (UNEP, 2024).</p></div>
+<div class="card"><h2>سجل الإنقاذ</h2><div id="log"></div></div>
+</section>
+</div>
+<script>
+var CATS={"خبز / عيش":3,"خضار ورقي":4,"طماطم وخضار":7,"فاكهة":5,"لحوم نيئة":2,"دجاج":3,"أكل مطبوخ / باقي":3,"ألبان":5,"بيض":21,"أخرى":5};
+var SUG=["أرز مطبوخ","عيش","طماطم","بطاطس","دجاج مسلوق","لحمة","مكرونة","لبن","موز","خيار","بيض","خضار مشكّل"];
+var REC=[
+{n:"فتة العيش والأرز",i:["عيش","أرز","طماطم"],s:["حمّص العيش الناشف في الفرن أو المقلاة.","رتّبه في طبق مع الأرز المتبقي.","اسكب عليه صلصة الطماطم والثوم والخل."]},
+{n:"أم علي",i:["عيش","لبن"],s:["فتّت العيش في صينية.","اسكب اللبن الساخن المحلّى فوقه.","ادخله الفرن حتى يتحمّر الوجه."]},
+{n:"أرز مقلي بالخضار والبيض",i:["أرز","خضار","بيض"],s:["شوّح الخضار في زيت قليل.","أضف الأرز المتبقي وقلّب.","اكسر البيض وقلّبه حتى ينضج."]},
+{n:"طاجن طماطم وبطاطس",i:["طماطم","بطاطس"],s:["قطّع البطاطس والطماطم شرائح.","رتّبها في طاجن مع الثوم والتوابل.","ادخله الفرن 30–40 دقيقة."]},
+{n:"مكرونة بالصلصة",i:["مكرونة","طماطم"],s:["حضّر صلصة من الطماطم المتبقية.","سخّن المكرونة فيها.","قدّمها مع الجبن إن وجد."]},
+{n:"ساندوتش دجاج مبهّر",i:["دجاج","عيش"],s:["فتّت الدجاج المسلوق.","شوّحه بالتوابل والبصل.","املأ به رغيف العيش."]},
+{n:"عجّة بالخضار",i:["بيض","خضار","بطاطس"],s:["قطّع الخضار والبطاطس صغيرة.","اخلطها بالبيض المخفوق.","اطهها على نار هادئة وجهين."]},
+{n:"كيك الموز",i:["موز","بيض","لبن"],s:["اهرس الموز الناضج جدًا.","اخلطه مع البيض واللبن والدقيق.","اخبزه 35 دقيقة."]},
+{n:"شوربة خضار",i:["خضار","بطاطس","طماطم"],s:["قطّع كل الخضار الباقية.","اسلقها مع الماء والتوابل.","اهرسها أو اتركها قطعًا."]},
+{n:"سلطة خيار وطماطم بالليمون",i:["خيار","طماطم"],s:["قطّع الخيار والطماطم.","أضف الليمون والملح والكمون.","قدّمها فورًا."]}
+];
+var $=function(i){return document.getElementById(i)};
+function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var inv=ld("zw_inv",[]),log=ld("zw_log",[]),sel={};
+function tx(s){var d=document.createElement("span");d.textContent=s;return d.innerHTML}
+function days(d){var a=new Date(d+"T00:00:00"),b=new Date();b.setHours(0,0,0,0);return Math.round((a-b)/864e5)}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function init(){
+$("cat").innerHTML=Object.keys(CATS).map(function(k){return "<option>"+k+"</option>"}).join("");
+$("sug").innerHTML=SUG.map(function(s){return "<option value='"+s+"'>"}).join("");
+$("dt").value=addDays(CATS["خبز / عيش"]);
+$("cat").onchange=function(){$("dt").value=addDays(CATS[$("cat").value])};
+var ings=[];REC.forEach(function(r){r.i.forEach(function(x){if(ings.indexOf(x)<0)ings.push(x)})});
+$("chips").innerHTML=ings.map(function(x){return "<button class='chip' data-i='"+x+"'>"+x+"</button>"}).join("");
+$("chips").onclick=function(e){var x=e.target.getAttribute("data-i");if(!x)return;sel[x]=!sel[x];e.target.classList.toggle("on");rec()};
+$("tabs").onclick=function(e){var t=e.target.getAttribute("data-t");if(!t)return;
+["inv","rec","imp"].forEach(function(s){$(s).hidden=s!==t});
+Array.prototype.forEach.call($("tabs").children,function(b){b.classList.toggle("on",b===e.target)})};
+$("add").onclick=function(){var n=$("nm").value.trim();if(!n||!$("dt").value)return;inv.push({n:n,d:$("dt").value});sv("zw_inv",inv);$("nm").value="";drawInv()};
+$("sv").onclick=function(){var k=parseFloat($("kg").value),p=parseFloat($("pr").value)||0;if(!(k>0))return;log.unshift({k:k,p:p,t:new Date().toLocaleDateString("ar-EG")});sv("zw_log",log);$("kg").value="";$("pr").value="";drawImp()};
+$("rs").onclick=function(){log=[];sv("zw_log",log);drawImp()};
+drawInv();drawImp();rec()}
+function drawInv(){
+var l=inv.map(function(x,i){return {x:x,i:i,d:days(x.d)}}).sort(function(a,b){return a.d-b.d});
+$("list").innerHTML=l.length?l.map(function(o){
+var c=o.d<0?"r":o.d<=2?"w":"",t=o.d<0?"منتهي منذ "+(-o.d)+" يوم":o.d===0?"ينتهي اليوم":"باقي "+o.d+" يوم";
+return "<div class='it'><span>"+tx(o.x.n)+" <span class='tag "+c+"'>"+t+"</span></span><button class='btn g' data-r='"+o.i+"'>استُهلك ✓</button></div>"}).join(""):"<p class='mut'>لا أصناف بعد. أضف أول صنف.</p>";
+Array.prototype.forEach.call($("list").querySelectorAll("[data-r]"),function(b){b.onclick=function(){inv.splice(+b.getAttribute("data-r"),1);sv("zw_inv",inv);drawInv()}})}
+function rec(){
+var s=Object.keys(sel).filter(function(k){return sel[k]});
+if(!s.length){$("rres").innerHTML="<p class='mut'>اختر مكوّنًا أو أكثر لتظهر الوصفات.</p>";return}
+var r=REC.map(function(x){var m=x.i.filter(function(y){return sel[y]}).length;return {x:x,m:m}}).filter(function(o){return o.m>0}).sort(function(a,b){return b.m/b.x.i.length-a.m/a.x.i.length||b.m-a.m});
+$("rres").innerHTML=r.map(function(o){return "<div class='card'><h2>"+o.x.n+" <span class='tag'>"+o.m+"/"+o.x.i.length+" مكوّنات</span></h2><div class='mut'>المكوّنات: "+o.x.i.join("، ")+"</div><ol>"+o.x.s.map(function(t){return "<li>"+t+"</li>"}).join("")+"</ol></div>"}).join("")}
+function drawImp(){
+var kg=0,eg=0;log.forEach(function(x){kg+=x.k;eg+=x.k*x.p});
+$("s1").textContent=kg.toFixed(1);$("s2").textContent=Math.round(eg);$("s3").textContent=(kg*2.5).toFixed(1);
+$("log").innerHTML=log.length?log.slice(0,20).map(function(x){return "<div class='it'><span>"+x.k+" كجم</span><span class='mut'>"+x.t+"</span></div>"}).join(""):"<p class='mut'>لا سجلات بعد.</p>"}
+init();
+</script>
+</body>
+</html>
